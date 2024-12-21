@@ -16,7 +16,7 @@ namespace Elasticsearch.API.Controllers
         [HttpPost]
         public async Task<IActionResult> Save(ProductCreateDto request)
         {
-            
+
             return CreateActionResult(await _productService.SaveAsync(request));
         }
 
@@ -24,6 +24,13 @@ namespace Elasticsearch.API.Controllers
         public async Task<IActionResult> GetAll()
         {
             var values = await _productService.GetAllAsync();
+            return CreateActionResult(values);
+        }
+
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetById(string id)
+        {
+            var values = await _productService.GetByIdAsync(id);
             return CreateActionResult(values);
         }
 

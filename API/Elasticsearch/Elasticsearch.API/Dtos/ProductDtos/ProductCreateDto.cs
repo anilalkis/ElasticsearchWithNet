@@ -16,7 +16,7 @@ namespace Elasticsearch.API.Dtos.ProductDtos
                 {
                     Width = productFeature.Widht,
                     Height = productFeature.Height,
-                    Color = productFeature.Color
+                    Color = (EColor)int.Parse(productFeature.Color)
                 }
             };
         }

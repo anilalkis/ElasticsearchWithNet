@@ -17,7 +17,7 @@ namespace Elasticsearch.API.Repositories
         {
             newProduct.Created = DateTime.Now;
 
-            var response = await _client.IndexAsync(newProduct,x=>x.Index(IndexName).Id(Guid.NewGuid().ToString()));
+            var response = await _client.IndexAsync(newProduct, x => x.Index(IndexName).Id(Guid.NewGuid().ToString()));
 
             if (!response.IsValid) return null;
 
@@ -32,6 +32,17 @@ namespace Elasticsearch.API.Repositories
             foreach (var hit in result.Hits) hit.Source.Id = hit.Id;
 
             return result.Documents.ToImmutableList();
+        }
+
+        public async Task<Product?> GetByIdAsync(string id)
+        {
+            var response = await _client.GetAsync<Product>(id, x => x.Index(IndexName));
+
+            if(!response.IsValid) return null;
+
+            response.Source.Id = response.Id;
+
+            return response.Source;
         }
     }
 }

@@ -33,9 +33,6 @@ namespace Elasticsearch.API.Services
             var values = await _repository.GetAllAsync();
             var productListDto = new List<ProductDto>();
 
-            //var productListDto =  values.Select(x => new ProductDto(x.Id, x.Name, x.Price, x.Stock, new ProductFeatureDto(x.Feature!.Width, x.Feature!.Height, x.Feature!.Color)))
-            //    .ToList();
-
             foreach(var x in values) 
             {
                 if(x.Feature is null)
@@ -44,12 +41,21 @@ namespace Elasticsearch.API.Services
                 }
                 else
                 {
-                    productListDto.Add(new ProductDto(x.Id, x.Name, x.Price, x.Stock, new ProductFeatureDto(x.Feature.Width, x.Feature.Height, x.Feature.Color)));
+                    productListDto.Add(new ProductDto(x.Id, x.Name, x.Price, x.Stock, new ProductFeatureDto(x.Feature.Width, x.Feature.Height, x.Feature.Color.ToString())));
 
                 }
             }
 
             return ResponseDto<List<ProductDto>>.Succsess(productListDto, HttpStatusCode.OK);
+        }
+
+        public async Task<ResponseDto<ProductDto>> GetByIdAsync(string id)
+        {
+            var value = await _repository.GetByIdAsync(id);
+
+            if (value == null) return ResponseDto<ProductDto>.Fail("Ürün bulunamadı",HttpStatusCode.NotFound);
+
+            return ResponseDto<ProductDto>.Succsess(value.CreateDto(),HttpStatusCode.OK);
         }
     }
 }
