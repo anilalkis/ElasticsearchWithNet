@@ -1,12 +1,13 @@
 ﻿using Elasticsearch.API.Models;
 using Nest;
+using System.Collections.Immutable;
 
 namespace Elasticsearch.API.Repositories
 {
     public class ProductRepository
     {
         private readonly ElasticClient _client;
-
+        private const string IndexName = "products";
         public ProductRepository(ElasticClient client)
         {
             _client = client;
@@ -16,13 +17,21 @@ namespace Elasticsearch.API.Repositories
         {
             newProduct.Created = DateTime.Now;
 
-            var response = await _client.IndexAsync(newProduct,x=>x.Index("products").Id(Guid.NewGuid().ToString()));
+            var response = await _client.IndexAsync(newProduct,x=>x.Index(IndexName).Id(Guid.NewGuid().ToString()));
 
             if (!response.IsValid) return null;
 
             newProduct.Id = response.Id;
 
             return newProduct;
+        }
+
+        public async Task<IImmutableList<Product>> GetAllAsync()
+        {
+            var result = await _client.SearchAsync<Product>(s => s.Index(IndexName).Query(q => q.MatchAll()));
+            foreach (var hit in result.Hits) hit.Source.Id = hit.Id;
+
+            return result.Documents.ToImmutableList();
         }
     }
 }
