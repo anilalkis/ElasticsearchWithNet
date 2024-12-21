@@ -66,5 +66,14 @@ namespace Elasticsearch.API.Services
 
             return ResponseDto<bool>.Succsess(true, HttpStatusCode.NoContent);
         }
+
+        public async Task<ResponseDto<bool>> DeleteAsync(string id)
+        {
+            var isSuccsess = await _repository.DeleteAsync(id);
+
+            if (!isSuccsess) return ResponseDto<bool>.Fail("Ürün silinemedi", HttpStatusCode.InternalServerError);
+
+            return ResponseDto<bool>.Succsess(true, HttpStatusCode.NoContent);
+        }
     }
 }

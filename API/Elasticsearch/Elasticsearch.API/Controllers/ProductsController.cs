@@ -25,6 +25,13 @@ namespace Elasticsearch.API.Controllers
             return CreateActionResult(await _productService.UpdateAsync(request));
         }
 
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> GetAll(string id)
+        {
+            var values = await _productService.DeleteAsync(id);
+            return CreateActionResult(values);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
