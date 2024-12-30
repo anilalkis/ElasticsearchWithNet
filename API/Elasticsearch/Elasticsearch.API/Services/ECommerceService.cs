@@ -39,5 +39,21 @@ namespace Elasticsearch.API.Services
             return await _repository.MatchAllQuery();
 
         }
+
+        public async Task<ImmutableList<ECommerce>> FuzzyQuery(string customerName)
+        {
+            return await _repository.FuzzyQuery(customerName);
+        }
+
+        public async Task<ImmutableList<ECommerce>> MatchQueryFullText(string categoryName)
+        {
+            return await _repository.MatchQueryFullText(categoryName);
+
+        }
+
+        public async Task<ImmutableList<ECommerce>> CompoundQueryExmp1(string cityName, double taxFulTotalPrice, string categoryName, string manufacture)
+        {
+            return await _repository.CompoundQueryExmp1(cityName,taxFulTotalPrice,categoryName,manufacture);
+        }
     }
 }

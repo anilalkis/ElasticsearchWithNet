@@ -1,6 +1,8 @@
-﻿using Elasticsearch.API.Services;
+﻿using Elasticsearch.API.Models.EcommerceModel;
+using Elasticsearch.API.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Immutable;
 
 namespace Elasticsearch.API.Controllers
 {
@@ -43,6 +45,25 @@ namespace Elasticsearch.API.Controllers
         public async Task<IActionResult> MatchAllQuery()
         {
             return Ok(await _eCommerceService.MatchAllQuery());
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> FuzzyQuery(string customerName)
+        {
+            return Ok(await _eCommerceService.FuzzyQuery(customerName));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MatchQueryFullText(string categoryName)
+        {
+            return Ok(await _eCommerceService.MatchQueryFullText(categoryName));
+
+        }
+
+        public async Task<IActionResult> CompoundQueryExmp1(string cityName, double taxFulTotalPrice, string categoryName, string manufacture)
+        {
+            return Ok(await _eCommerceService.CompoundQueryExmp1(cityName,taxFulTotalPrice,categoryName,manufacture));
+
         }
     }
 }

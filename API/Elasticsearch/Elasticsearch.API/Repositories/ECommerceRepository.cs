@@ -62,6 +62,8 @@ namespace Elasticsearch.API.Repositories
                     .Field(f => f.CustomerFullName
                         .Suffix("keyword")).Value(customerFullName))));
 
+            if (result.IsSuccess()) { foreach (var hit in result.Hits) hit.Source!.Id = hit.Id!; }
+
             return result.Documents.ToImmutableList();
         }
 
@@ -73,6 +75,8 @@ namespace Elasticsearch.API.Repositories
                     .NumberRange(nr => nr
                         .Field(f => f.TaxFulTotalPrice).Gte(fromPrice).Lte(toPrice)))));
 
+            if (result.IsSuccess()) { foreach (var hit in result.Hits) hit.Source!.Id = hit.Id!; }
+
             return result.Documents.ToImmutableList();
         }
 
@@ -81,6 +85,61 @@ namespace Elasticsearch.API.Repositories
             var result = await _client.SearchAsync<ECommerce>(s => s.Index(indexName).Size(10)
             .Query(q => q.MatchAll(new MatchAllQuery())));
 
+            if (result.IsSuccess()) { foreach (var hit in result.Hits) hit.Source!.Id = hit.Id!; }
+
+            return result.Documents.ToImmutableList();
+        }
+
+        public async Task<ImmutableList<ECommerce>> FuzzyQuery(string customerName)
+        {
+            var result = await _client.SearchAsync<ECommerce>(s => s.Index(indexName).Size(10)
+            .Query(q => q
+                .Fuzzy(fz => fz
+                    .Field(f => f.CustomerFirstName
+                        .Suffix("keyword")).Value(customerName)
+                            .Fuzziness(new Fuzziness(1)))));
+
+            if (result.IsSuccess()) { foreach (var hit in result.Hits) hit.Source!.Id = hit.Id!; }
+
+            return result.Documents.ToImmutableList();
+        }
+
+        public async Task<ImmutableList<ECommerce>> MatchQueryFullText(string categoryName)
+        {
+            var result = await _client.SearchAsync<ECommerce>(s => s.Index(indexName)
+                .Query(q => q
+                    .Match(m => m
+                        .Field(f => f.Category)
+                        .Query(categoryName))));
+
+            if (result.IsSuccess()) { foreach (var hit in result.Hits) hit.Source!.Id = hit.Id!; }
+            return result.Documents.ToImmutableList();
+        }
+
+        public async Task<ImmutableList<ECommerce>> CompoundQueryExmp1(string cityName, double taxFulTotalPrice, string categoryName, string manufacture)
+        {
+            var result = await _client.SearchAsync<ECommerce>(s => s.Index(indexName)
+                .Query(q => q
+                    .Bool(b => b
+                        .Must(m => m
+                            .Term(t => t
+                                .Field("geoip.city_name")
+                                .Value(cityName)))
+                        .MustNot(mn => mn
+                            .Range(r => r
+                                .NumberRange(tr => tr
+                                    .Field(f => f.TaxFulTotalPrice).Lte(taxFulTotalPrice))))
+                        .Should(s => s
+                            .Term(t => t
+                                .Field(f => f.Category.Suffix("keyword"))
+                                    .Value(categoryName)))
+                        .Filter(f => f
+                            .Term(t => t
+                                .Field("manufacturer.keyword")
+                                    .Value(manufacture))))));
+                        
+
+            if (result.IsSuccess()) { foreach (var hit in result.Hits) hit.Source!.Id = hit.Id!; }
             return result.Documents.ToImmutableList();
         }
     }
