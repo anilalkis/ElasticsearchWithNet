@@ -2,7 +2,6 @@
 using Elasticsearch.API.Dtos.ProductDtos;
 using Elasticsearch.API.Models;
 using Elasticsearch.API.Repositories;
-using Nest;
 using System.Collections.Immutable;
 using System.Net;
 
