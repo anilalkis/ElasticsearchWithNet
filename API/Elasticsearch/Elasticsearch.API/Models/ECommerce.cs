@@ -10,7 +10,7 @@ namespace Elasticsearch.API.Models.EcommerceModel
         [JsonPropertyName("customer_first_name")]
         public string CustomerFirstName { get; set; } = null!;
 
-        [JsonPropertyName("customer_surname_name")]
+        [JsonPropertyName("customer_last_name")]
         public string CustomerSurnameName { get; set; } = null!;
         
         [JsonPropertyName("customer_full_name")]

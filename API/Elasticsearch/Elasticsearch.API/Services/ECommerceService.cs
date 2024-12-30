@@ -17,5 +17,10 @@ namespace Elasticsearch.API.Services
         {
             return await _repository.TermQuery(customerFirstName);
         }
+
+        public async Task<IImmutableList<ECommerce>> TermsQuery(List<string> customerFirstNameList)
+        {
+            return await _repository.TermsQuery(customerFirstNameList);
+        }
     }
 }
