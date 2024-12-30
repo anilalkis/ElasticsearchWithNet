@@ -123,7 +123,7 @@ namespace Elasticsearch.API.Repositories
                     .Bool(b => b
                         .Must(m => m
                             .Term(t => t
-                                .Field("geoip.city_name")
+                                .Field("geoip.city_name"!)
                                 .Value(cityName)))
                         .MustNot(mn => mn
                             .Range(r => r
@@ -135,7 +135,7 @@ namespace Elasticsearch.API.Repositories
                                     .Value(categoryName)))
                         .Filter(f => f
                             .Term(t => t
-                                .Field("manufacturer.keyword")
+                                .Field("manufacturer.keyword"!)
                                     .Value(manufacture))))));
                         
 

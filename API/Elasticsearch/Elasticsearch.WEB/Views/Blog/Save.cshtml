@@ -1,0 +1,34 @@
+﻿@model BlogCreateViewModel
+@{
+    ViewData["Title"] = "Save";
+}
+
+<div class="row">
+    <div class="col-md-6 offset-md-3">
+        @if(TempData["result"] != null)
+        {
+            <div class="alert alert-info">
+                @TempData["result"]
+            </div>
+        }
+        <h2>Create Blog</h2>
+        <form method="post" asp-action="Save">
+            <div class="mb-3">
+                <label for="exampleFormControlInput1" class="form-label">Blog Title</label>
+                <input asp-for="@Model.Title" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Content</label>
+                <textarea asp-for="@Model.Content" class="form-control"rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <label for="exampleFormControlTextarea1" class="form-label">Tags</label>
+                <textarea asp-for="@Model.Tags" class="form-control"rows="3"></textarea>
+            </div>
+            <div class="mb-3">
+                <button type="submit" class="btn btn-primary ">Save</button>
+            </div>
+        </form>
+    </div>
+</div>
+
