@@ -26,5 +26,23 @@ namespace Elasticsearch.API.Controllers
         {
             return Ok(await _eCommerceService.TermsQuery(customerFirstNameList));
         }
+
+        [HttpGet]
+        public async Task<IActionResult> PrefixQuery(string customerFullName)
+        {
+            return Ok(await _eCommerceService.PrefixQuery(customerFullName));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> RangeQuery(double fromPrice, double toPrice)
+        {
+            return Ok(await _eCommerceService.RangeQuery(fromPrice,toPrice));
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> MatchAllQuery()
+        {
+            return Ok(await _eCommerceService.MatchAllQuery());
+        }
     }
 }

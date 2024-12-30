@@ -22,5 +22,22 @@ namespace Elasticsearch.API.Services
         {
             return await _repository.TermsQuery(customerFirstNameList);
         }
+
+        public async Task<ImmutableList<ECommerce>> PrefixQuery(string customerFullName)
+        {
+            return await _repository.PrefixQuery(customerFullName);
+        }
+
+        public async Task<ImmutableList<ECommerce>> RangeQuery(double fromPrice, double toPrice)
+        {
+            return await _repository.RangeQuery(fromPrice,toPrice);
+
+        }
+
+        public async Task<ImmutableList<ECommerce>> MatchAllQuery()
+        {
+            return await _repository.MatchAllQuery();
+
+        }
     }
 }
