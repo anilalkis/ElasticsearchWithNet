@@ -34,6 +34,17 @@ namespace Elasticsearch.WEB.Controllers
 
         }
 
+        public async Task<IActionResult> Search()
+        {
+            return View(await _blogService.SearchAsync(string.Empty));
+        }
 
+        [HttpPost]
+        public async Task<IActionResult> Search(string searchText)
+        {
+            var blogList = await _blogService.SearchAsync(searchText);
+
+            return View(blogList);
+        }
     }
 }
